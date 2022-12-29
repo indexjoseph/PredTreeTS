@@ -61,6 +61,13 @@ class TreeBuilder{
         root.addChild(word);
     }
 
+    /**
+     * 
+     * @param {String} letter - Letter used to check if there's a valid root
+     * within thee HashMap of root's.
+     * @returns {TreeNode} or {Null} - If the first letter exists as a root
+     * within the hashMap of root's then 
+     */
     public startSearch(letter : string) : any {
         letter = letter.toLowerCase();
         let start : any = null;
@@ -69,7 +76,34 @@ class TreeBuilder{
         return start
     }
 
-    
+    /**
+     * This method will populate totalWords array until all the children of the
+     * root has been traveersed or the maximum amount of words are in the total
+     * Words array.
+     * @param {TreeNode} root - Root of the tree for (The first letter within
+     * currentWord)
+     * @param {String} potentialWord - Current searched content
+     * @param {Number} maxWords - Max number of suggestions to be given.
+     * @param {Array} totalWords - - Array that holds all possible suggestions.
+     * @returns 
+     */
+    public lookUpWords(root : TreeNode, potentialWord : string, maxWords : number, totalWords : string[]) : void {
+        for(let i = 0; i < root.getChildren() && maxWords > totalWords.length; i++){
+
+            let child = root.getChild(i);
+
+            if(child.getData().toLowerCase().startsWith(potentialWord.toLowerCase())
+            && !totalWords.includes(child.getData())){
+                totalWords.push(child.getData())
+            }else if(potentialWord.toLowerCase().startsWith(child.getData())){
+                this.lookUpWords(child, potentialWord, maxWords, totalWords);
+                return;
+            }else if(child.getData() === potentialWord.toLowerCase()){
+                this.lookUpWords(child, potentialWord, maxWords, totalWords);
+                return;
+            }
+        }
+    }
 }
 
 
